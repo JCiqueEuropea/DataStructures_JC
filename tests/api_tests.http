@@ -1,0 +1,95 @@
+@hostname = localhost
+@port = 8000
+@host = http://{{hostname}}:{{port}}
+@apiKey = mi_super_secreto_api_key_123
+@contentType = application/json
+
+### Create Product A
+# @name createProductA
+POST {{host}}/products/
+Content-Type: {{contentType}}
+X-API-Key: {{apiKey}}
+
+{
+    "name": "Gaming Laptop",
+    "price": 1500.00,
+    "description": "High performance laptop"
+}
+
+### Create Product B
+# @name createProductB
+POST {{host}}/products/
+Content-Type: {{contentType}}
+X-API-Key: {{apiKey}}
+
+{
+    "name": "Wireless Mouse",
+    "price": 25.50
+}
+
+### Get Product by ID
+@productId = {{createProductA.response.body.id}}
+GET {{host}}/products/{{productId}}
+X-API-Key: {{apiKey}}
+
+### Create Product Invalid
+POST {{host}}/products/
+Content-Type: {{contentType}}
+X-API-Key: {{apiKey}}
+
+{
+    "name": "Bad Product",
+    "price": -100
+}
+
+### Create Order
+# @name createOrder
+POST {{host}}/orders/
+Content-Type: {{contentType}}
+X-API-Key: {{apiKey}}
+
+{
+    "items": [
+        {
+            "product_id": {{createProductA.response.body.id}},
+            "quantity": 1
+        },
+        {
+            "product_id": {{createProductB.response.body.id}},
+            "quantity": 2
+        }
+    ]
+}
+
+### Create Order Fail
+POST {{host}}/orders/
+Content-Type: {{contentType}}
+X-API-Key: {{apiKey}}
+
+{
+    "items": [
+        { "product_id": 99999, "quantity": 1 }
+    ]
+}
+
+### List Orders
+GET {{host}}/orders/
+X-API-Key: {{apiKey}}
+
+### Get Order by ID
+@orderId = {{createOrder.response.body.id}}
+GET {{host}}/orders/{{orderId}}
+X-API-Key: {{apiKey}}
+
+### Update Order Status
+PUT {{host}}/orders/{{orderId}}
+Content-Type: {{contentType}}
+X-API-Key: {{apiKey}}
+
+{
+    "status": "Shipped"
+}
+
+### Delete Order
+DELETE {{host}}/orders/{{orderId}}
+X-API-Key: {{apiKey}}

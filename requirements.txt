@@ -1,0 +1,12 @@
+alembic
+fastapi
+httpx
+pydantic
+pydantic-settings
+pyodbc
+pytest
+pytest-asyncio
+python-dotenv
+sqlalchemy
+uliweb-alembic
+uvicorn
